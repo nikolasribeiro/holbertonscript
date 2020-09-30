@@ -53,10 +53,14 @@ def main():
     commit_message = ""
     args = get_args()
 
-    if args.betty == None and args.git == False and args.message == False:
+    if args.betty == False and args.git == False and args.message == False:
         
         print( pintar_texto("initializing push process", color="yellow") )
-        os.system(f"betty {args.file} && git status && git add {args.file} && git commit -m 'commit' && git push")
+        os.system(f"betty {args.file}")
+        os.system("git status")
+        os.system("git add .")
+        os.system("git commit -m 'commit' ")
+        os.system("git push")
         print( pintar_texto("Push process finished successfully!", color="green") )
 
     else:
