@@ -1,5 +1,7 @@
 import argparse
 import os
+import sys
+
 
 try:
     from termcolor import colored
@@ -31,7 +33,7 @@ def push_process(text):
     os.system("git status")
     choice = input( pintar_texto("Do you want to save all the changes and commit? Y/n: ", color="yellow") )
 
-    if choice in ["y","Y"]:
+    if choice in ["y","Y",""]:
         print( pintar_texto("..:: initializing the remote push process", color="green") )
         os.system("git add .")
         os.system(f"git commit -m {text}")
@@ -41,6 +43,11 @@ def push_process(text):
         print("Process canceled by User")
 
 def save_message(message):
+
+    if message in ["q","Q"]:
+        print("Cancel by User")
+        sys.exit()
+
     if message != "":
         print( pintar_texto(f"Message {str(message)} saved!", color="green") )
     else:
@@ -67,21 +74,13 @@ def main():
         if args.betty != False:
             check_betty(args.file)
 
+        if args.message != False:
+            print("To cancel this line, you can do Ctrl + C or type: q")
+            commit_message = save_message( input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ") )
+            
+
         if args.git != False:
             push_process(commit_message)
-
-        if args.message != False:
-            commit_message = input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ")
-            save_message(commit_message)
-    
-    #if you don't put any flag or argument, the program follow this steps
-    
-
-    
-
-    
-
-
 
 if __name__ == "__main__":
     main()
