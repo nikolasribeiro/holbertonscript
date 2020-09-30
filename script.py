@@ -16,7 +16,7 @@ def pintar_texto(texto, color="white"):
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="File you want to check with betty")
-    parser.add_argument("-b","--betty", help="Betty checks your code for correct format")
+    parser.add_argument("-b","--betty", help="Betty checks your code for correct format", action="store_true")
     parser.add_argument("-g","--git", help="This flag is a boolean, use this flag if you want to check and push your file", action="store_true")
     parser.add_argument("-m","--message", help="You can set a message for commit (you can use this flag without -g flag)", action="store_true")
 
@@ -54,15 +54,17 @@ def main():
     args = get_args()
 
     if args.betty == None and args.git == False and args.message == False:
-        print( pintar_texto("initializing push process", color="green") )
-        os.system(f"betty {args.file} && git status && git add . && git commit -m 'commit' && git push")
+        
+        print( pintar_texto("initializing push process", color="yellow") )
+        os.system(f"betty {args.file} && git status && git add {args.file} && git commit -m 'commit' && git push")
+        print( pintar_texto("Push process finished successfully!", color="green") )
 
     else:
-        if args.betty != None:
+        if args.betty != False:
             check_betty(args.file)
 
         if args.git != False:
-            push_process()
+            push_process(commit_message)
 
         if args.message != False:
             commit_message = input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ")
