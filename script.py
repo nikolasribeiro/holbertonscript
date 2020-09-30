@@ -65,12 +65,19 @@ def main():
         
         print( pintar_texto("initializing push process", color="yellow") )
         os.system(f"betty {args.file}")
-        os.system("git status")
-        os.system("git add .")
-        os.system("git commit -m 'commit' ")
-        os.system("git push")
-        print( pintar_texto("Push process finished successfully!", color="green") )
-
+        confirm = input("Betty is ok? y/n: ")
+        if confirm in ["y","Y"]:
+            os.system("git status")
+            os.system("git add .")
+            os.system("git commit -m 'commit' ")
+            os.system("git push")
+            print( pintar_texto("Push process finished successfully!", color="green") )
+        elif confirm in ["n","N"]:
+            print( pintar_texto("Check betty and when you have finished, run again!", color="red") )
+        else:
+            print( pintar_texto("Invalid option, ending software", color="red") )
+            sys.exit()
+        
     else:
         if args.betty != False:
             check_betty(args.file)
