@@ -1,7 +1,8 @@
+#!/usr/bin/python3
+
 import argparse
 import os
 import sys
-
 
 try:
     from termcolor import colored
