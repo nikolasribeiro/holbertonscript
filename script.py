@@ -69,7 +69,8 @@ def main():
         if confirm in ["y","Y",""]:
             os.system("git status")
             os.system("git add .")
-            os.system("git commit -m 'commit' ")
+            commit_message = save_message( input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ") )
+            os.system(f"git commit -m {commit_message} ")
             os.system("git push")
             print( pintar_texto("Push process finished successfully!", color="green") )
         elif confirm in ["n","N"]:
@@ -85,7 +86,6 @@ def main():
         if args.message != False:
             print("To cancel this line, you can do Ctrl + C or type: q")
             commit_message = save_message( input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ") )
-            
 
         if args.git != False:
             push_process(commit_message)
