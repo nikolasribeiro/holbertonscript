@@ -65,8 +65,8 @@ def main():
         
         print( pintar_texto("initializing push process", color="yellow") )
         os.system(f"betty {args.file}")
-        confirm = input("Betty is ok? y/n: ")
-        if confirm in ["y","Y"]:
+        confirm = input("Betty is ok? Y/n: ")
+        if confirm in ["y","Y",""]:
             os.system("git status")
             os.system("git add .")
             os.system("git commit -m 'commit' ")
