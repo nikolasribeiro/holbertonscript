@@ -70,6 +70,7 @@ def main():
             os.system("git status")
             os.system("git add .")
             commit_message = save_message( input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ") )
+            
             os.system(f"git commit -m {commit_message} ")
             os.system("git push")
             print( pintar_texto("Push process finished successfully!", color="green") )
