@@ -63,9 +63,18 @@ Tu rama está actualizada con 'origin/master'.
 nada para hacer commit, el árbol de trabajo está limpio
 Insert message (if you dont put any message, by default, the commit message will be 'commit'): "test commit"
 Message "test commit" saved!
-En la rama master
-Tu rama está actualizada con 'origin/master'.
+[master c036129] test commit
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+Contando objetos: 3, listo.
+Delta compression using up to 8 threads.
+Comprimiendo objetos: 100% (3/3), listo.
+Escribiendo objetos: 100% (3/3), 291 bytes | 291.00 KiB/s, listo.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/nikolasribeiro/holbertonscript
+   e87f9fd..c036129  master -> master
 Push process finished successfully!
+
 ```
 
 ### Author
