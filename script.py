@@ -18,7 +18,7 @@ def pintar_texto(texto, color="white"):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("file", help="File you want to check with betty")
+    parser.add_argument("file", help="File you want to check with betty", nargs="*")
     parser.add_argument("-b","--betty", help="Betty checks your code for correct format", action="store_true")
     parser.add_argument("-g","--git", help="This flag is a boolean, use this flag if you want to check and push your file", action="store_true")
     parser.add_argument("-m","--message", help="You can set a message for commit (you can use this flag without -g flag)", action="store_true")
@@ -61,35 +61,38 @@ def main():
     commit_message = ""
     args = get_args()
 
-    if args.betty == False and args.git == False and args.message == False:
-        
-        print( pintar_texto("initializing push process", color="yellow") )
-        os.system(f"betty {args.file}")
-        confirm = input("Betty is ok? Y/n: ")
-        if confirm in ["y","Y",""]:
-            os.system("git status")
-            os.system("git add .")
-            commit_message = save_message( input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ") )
+    for files in args.file:
+        print(files)
+        if args.betty == False and args.git == False and args.message == False:
             
-            os.system(f"git commit -m {commit_message} ")
-            os.system("git push")
-            print( pintar_texto("Push process finished successfully!", color="green") )
-        elif confirm in ["n","N"]:
-            print( pintar_texto("Check betty and when you have finished, run again!", color="red") )
+            print( pintar_texto("initializing push process", color="yellow") )
+            os.system(f"betty {files}")
+            confirm = input("Betty is ok? Y/n: ")
+            if confirm in ["y","Y",""]:
+                os.system("git status")
+                os.system("git add .")
+                commit_message = save_message( input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ") )
+                
+                os.system(f"git commit -m {commit_message} ")
+                os.system("git push")
+                print( pintar_texto("Push process finished successfully!", color="green") )
+
+            elif confirm in ["n","N"]:
+                print( pintar_texto("Check betty and when you have finished, run again!", color="red") )
+            else:
+                print( pintar_texto("Invalid option, ending software", color="red") )
+                sys.exit()
+            
         else:
-            print( pintar_texto("Invalid option, ending software", color="red") )
-            sys.exit()
-        
-    else:
-        if args.betty != False:
-            check_betty(args.file)
+            if args.betty != False:
+                check_betty(files)
 
-        if args.message != False:
-            print("To cancel this line, you can do Ctrl + C or type: q")
-            commit_message = save_message( input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ") )
+            if args.message != False:
+                print("To cancel this line, you can do Ctrl + C or type: q")
+                commit_message = save_message( input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ") )
 
-        if args.git != False:
-            push_process(commit_message)
+            if args.git != False:
+                push_process(commit_message)
 
 if __name__ == "__main__":
     main()
