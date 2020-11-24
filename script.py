@@ -62,15 +62,14 @@ def main():
     args = get_args()
 
     for files in args.file:
-        print(files)
         if args.betty == False and args.git == False and args.message == False:
             
             print( pintar_texto("initializing push process", color="yellow") )
             os.system(f"betty {files}")
             confirm = input("Betty is ok? Y/n: ")
             if confirm in ["y","Y",""]:
-                os.system("git status")
-                os.system("git add .")
+                print( pintar_texto(f"Adding {files} to git stage for push!", color="green") )
+                os.system(f"git add {files}")
                 commit_message = save_message( input("Insert message (if you dont put any message, by default, the commit message will be 'commit'): ") )
                 
                 os.system(f"git commit -m {commit_message} ")
