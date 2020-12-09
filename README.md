@@ -1,1 +1,2 @@
-this is a readme file
+Holberton Script Auto-format Files (HSAF)
+
