@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 import argparse
 import os
 import sys
@@ -13,9 +12,6 @@ except:
     os.system("pip3 install autopep8")
     os.system("sudo apt install clang-format")
     print("---=== TERMCOLOR INSTALLED SUCCESSFULLY ===---")
-
-
-FORMAT_BETTY = 'clang-format -i 8-print_array.c -style="{ BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Allman, AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4 }"'
 
 
 def pintar_texto(texto, color="white"):
@@ -46,11 +42,12 @@ def get_args():
 def format_betty(file):
     BETTY_STYLE = """{BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Allman,
                    AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4}"""
-    print(pintar_texto(f"Formatting file: {file}"))
+    print(pintar_texto(f"...::: Formatting file: --> {file} <--", color="green"))
     os.system(f'clang-format -i {file} -style="{BETTY_STYLE}"')
 
 
 def format_pep(file):
+    print(pintar_texto(f"...::: Formatting file: --> {file} <--", color="yellow"))
     os.system(f"autopep8 -i {file}")
 
 
@@ -89,7 +86,7 @@ def save_message(message):
 def main():
     commit_message = ""
     args = get_args()
-    
+    type_of_format = ""
 
     for files in args.file:
 
@@ -112,30 +109,35 @@ def main():
             break
 
         # Check the extension of the files
-        if files.endswith(".c"):
+        if files.endswith(".c") or files.endswith(".h"):
+            type_of_format="Betty"
             format_betty(files)
 
         elif files.endswith(".py"):
+            type_of_format="Pep8"
             format_pep(files)
 
-        print(pintar_texto("initializing push process", color="yellow"))
-        os.system(f"{type_of_format.lower()} {files}")
-        confirm = input(f"{type_of_format} is ok? Y/n: ")
-        if confirm in ["y", "Y", ""]:
-            os.system("git status")
-            os.system(f"git add {files}")
-            commit_message = save_message(input(
-                "Insert message (if you dont put any message, by default, the commit message will be 'commit'): "))
-            os.system(f"git commit -m {commit_message} ")
-            os.system("git push")
-            print(pintar_texto(
-                "Push process finished successfully!", color="green"))
-        elif confirm in ["n", "N"]:
-            print(pintar_texto(
-                f"Check the format and when you have finished, run again!", color="red"))
-        else:
-            print(pintar_texto("Invalid option, ending software", color="red"))
-            sys.exit()
+    #Verifying the format
+    print(pintar_texto("Checking that all the formats are ok"))
+    os.system("betty *.c && betty *.h && pep8 *.py")
+    confirm = input(f"Everything is ok? Y/n: ")
+    print(pintar_texto("initializing push process", color="yellow"))
+    
+    if confirm in ["y", "Y", ""]:
+        os.system("git status")
+        os.system(f"git add -A")
+        commit_message = save_message(input(
+            "Insert message (if you dont put any message, by default, the commit message will be 'commit'): "))
+        os.system(f"git commit -m {commit_message} ")
+        os.system("git push")
+        print(pintar_texto(
+            "Push process finished successfully!", color="green"))
+    elif confirm in ["n", "N"]:
+        print(pintar_texto(
+            f"Check the format and when you have finished, run again!", color="red"))
+    else:
+        print(pintar_texto("Invalid option, ending software", color="red"))
+        sys.exit()
 
 
 if __name__ == "__main__":
