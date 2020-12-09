@@ -75,11 +75,37 @@ def save_message(message):
 
     return message
 
-def check_and_push_betty(args, files):
-    if args.betty == False and args.git == False and args.message == False:
+
+def main():
+    commit_message = ""
+    args = get_args()
+    type_of_format = ""
+
+    for files in args.file:
+        if args.betty != False:
+            check_betty(files)
+        if args.message != False:
+            print("To cancel this line, you can do Ctrl + C or type: q")
+            commit_message = save_message(input(
+                "Insert message (if you dont put any message, by default, the commit message will be 'commit'): "))
+        if args.git != False:
+            push_process(commit_message)
+
+        #Check the extension of the files
+        if files.endswith(".c"):
+            type_of_format="betty"
+            print("La extension del archivo es .c y el nombre del archivo es: ", files)
+            print("Valor del type_of_format: ", type_of_format)
+
+        elif files.endswith(".py"):
+            type_of_format="pep8"
+            print("La extension del archivo es .py y el nombre del archivo es: ", files)
+            print("Valor del type_of_format: ", type_of_format)
+
+        
         print(pintar_texto("initializing push process", color="yellow"))
-        os.system(f"betty {files}")
-        confirm = input("Betty is ok? Y/n: ")
+        os.system(f"{type_of_format} {files}")
+        confirm = input(f"{type_of_format} is ok? Y/n: ")
         if confirm in ["y", "Y", ""]:
             os.system("git status")
             os.system("git add .")
@@ -91,28 +117,12 @@ def check_and_push_betty(args, files):
                 "Push process finished successfully!", color="green"))
         elif confirm in ["n", "N"]:
             print(pintar_texto(
-                "Check betty and when you have finished, run again!", color="red"))
+                f"Check {type_of_format} and when you have finished, run again!", color="red"))
         else:
             print(pintar_texto("Invalid option, ending software", color="red"))
             sys.exit()
-    else:
-        if args.betty != False:
-            check_betty(files)
-        if args.message != False:
-            print("To cancel this line, you can do Ctrl + C or type: q")
-            commit_message = save_message(input(
-                "Insert message (if you dont put any message, by default, the commit message will be 'commit'): "))
-        if args.git != False:
-            push_process(commit_message)
-
-def main():
-    commit_message = ""
-    args = get_args()
-
-    for files in args.file:
-        check_and_push_betty(args, files)
         
-
+        
 
 if __name__ == "__main__":
     main()
