@@ -41,8 +41,10 @@ def get_args():
 def check_betty(file):
     os.system(f"betty {file}")
 
+
 def check_pep(file):
     os.system(f"pep8 {file}")
+
 
 def push_process(text):
 
@@ -83,26 +85,31 @@ def main():
 
     for files in args.file:
 
-        #Checks if the flag exist
+        # Checks if the flag exist
         if args.betty != False:
             check_betty(files)
+            break
+
         if args.message != False:
             print("To cancel this line, you can do Ctrl + C or type: q")
             commit_message = save_message(input(
                 "Insert message (if you dont put any message, by default, the commit message will be 'commit'): "))
+
         if args.git != False:
             push_process(commit_message)
+            break
+
         if args.pep != False:
             check_pep(files)
+            break
 
-        #Check the extension of the files
+        # Check the extension of the files
         if files.endswith(".c"):
-            type_of_format="betty"
+            type_of_format = "betty"
 
         elif files.endswith(".py"):
-            type_of_format="pep8"
+            type_of_format = "pep8"
 
-        
         print(pintar_texto("initializing push process", color="yellow"))
         os.system(f"{type_of_format} {files}")
         confirm = input(f"{type_of_format} is ok? Y/n: ")
@@ -121,8 +128,7 @@ def main():
         else:
             print(pintar_texto("Invalid option, ending software", color="red"))
             sys.exit()
-        
-        
+
 
 if __name__ == "__main__":
     main()
