@@ -10,7 +10,12 @@ except:
     print("...::: TERMCOLOR dependency does not exist, the program will install it at this moment:::...")
     os.system("sudo apt install python3-pip -y")
     os.system("pip3 install termcolor")
+    os.system("pip3 install autopep8")
+    os.system("sudo apt install clang-format")
     print("---=== TERMCOLOR INSTALLED SUCCESSFULLY ===---")
+
+
+FORMAT_BETTY = 'clang-format -i 8-print_array.c -style="{ BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Allman, AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4 }"'
 
 
 def pintar_texto(texto, color="white"):
@@ -23,10 +28,10 @@ def get_args():
         "file", help="File you want to check and upload", nargs="*"
     )
     parser.add_argument(
-        "-b", "--betty", help="Betty checks your code for correct format", action="store_true"
+        "-b", "--betty", help="Format the code to betty style", action="store_true"
     )
     parser.add_argument(
-        "-p", "--pep", help="Pep8 checks your code for correct format", action="store_true"
+        "-p", "--pep", help="Format the code to pep8 style", action="store_true"
     )
     parser.add_argument(
         "-g", "--git", help="This flag is a boolean, use this flag if you want to check and push your file", action="store_true"
@@ -38,12 +43,15 @@ def get_args():
     return parser.parse_args()
 
 
-def check_betty(file):
-    os.system(f"betty {file}")
+def format_betty(file):
+    BETTY_STYLE = """{BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Allman,
+                   AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4}"""
+    print(pintar_texto(f"Formatting file: {file}"))
+    os.system(f'clang-format -i {file} -style="{BETTY_STYLE}"')
 
 
-def check_pep(file):
-    os.system(f"pep8 {file}")
+def format_pep(file):
+    os.system(f"autopep8 -i {file}")
 
 
 def push_process(text):
@@ -81,13 +89,13 @@ def save_message(message):
 def main():
     commit_message = ""
     args = get_args()
-    type_of_format = ""
+    
 
     for files in args.file:
 
         # Checks if the flag exist
         if args.betty != False:
-            check_betty(files)
+            format_betty(files)
             break
 
         if args.message != False:
@@ -100,22 +108,22 @@ def main():
             break
 
         if args.pep != False:
-            check_pep(files)
+            format_pep(files)
             break
 
         # Check the extension of the files
         if files.endswith(".c"):
-            type_of_format = "Betty"
+            format_betty(files)
 
         elif files.endswith(".py"):
-            type_of_format = "Pep8"
+            format_pep(files)
 
         print(pintar_texto("initializing push process", color="yellow"))
         os.system(f"{type_of_format.lower()} {files}")
         confirm = input(f"{type_of_format} is ok? Y/n: ")
         if confirm in ["y", "Y", ""]:
             os.system("git status")
-            os.system("git add .")
+            os.system(f"git add {files}")
             commit_message = save_message(input(
                 "Insert message (if you dont put any message, by default, the commit message will be 'commit'): "))
             os.system(f"git commit -m {commit_message} ")
@@ -124,7 +132,7 @@ def main():
                 "Push process finished successfully!", color="green"))
         elif confirm in ["n", "N"]:
             print(pintar_texto(
-                f"Check {type_of_format} and when you have finished, run again!", color="red"))
+                f"Check the format and when you have finished, run again!", color="red"))
         else:
             print(pintar_texto("Invalid option, ending software", color="red"))
             sys.exit()
