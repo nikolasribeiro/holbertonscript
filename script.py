@@ -105,13 +105,13 @@ def main():
 
         # Check the extension of the files
         if files.endswith(".c"):
-            type_of_format = "betty"
+            type_of_format = "Betty"
 
         elif files.endswith(".py"):
-            type_of_format = "pep8"
+            type_of_format = "Pep8"
 
         print(pintar_texto("initializing push process", color="yellow"))
-        os.system(f"{type_of_format} {files}")
+        os.system(f"{type_of_format.lower()} {files}")
         confirm = input(f"{type_of_format} is ok? Y/n: ")
         if confirm in ["y", "Y", ""]:
             os.system("git status")
