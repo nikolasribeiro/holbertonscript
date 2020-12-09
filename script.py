@@ -82,6 +82,8 @@ def main():
     type_of_format = ""
 
     for files in args.file:
+
+        #Checks if the flag exist
         if args.betty != False:
             check_betty(files)
         if args.message != False:
@@ -90,17 +92,15 @@ def main():
                 "Insert message (if you dont put any message, by default, the commit message will be 'commit'): "))
         if args.git != False:
             push_process(commit_message)
+        if args.pep != False:
+            check_pep(files)
 
         #Check the extension of the files
         if files.endswith(".c"):
             type_of_format="betty"
-            print("La extension del archivo es .c y el nombre del archivo es: ", files)
-            print("Valor del type_of_format: ", type_of_format)
 
         elif files.endswith(".py"):
             type_of_format="pep8"
-            print("La extension del archivo es .py y el nombre del archivo es: ", files)
-            print("Valor del type_of_format: ", type_of_format)
 
         
         print(pintar_texto("initializing push process", color="yellow"))
