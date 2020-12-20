@@ -44,7 +44,7 @@ def format_betty(file):
                    AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4}"""
     print(pintar_texto(f"...::: Formatting file: --> {file} <--", color="green"))
     os.system(f'clang-format -i {file} -style="{BETTY_STYLE}"')
-
+ 
 
 def format_pep(file):
     print(pintar_texto(f"...::: Formatting file: --> {file} <--", color="yellow"))
