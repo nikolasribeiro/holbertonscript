@@ -40,19 +40,11 @@ def get_args():
 
 
 def format_betty(file):
-    import getpass
-    NAME_SYSTEM_USER = getpass.getuser()
-
     BETTY_STYLE = """{BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Allman,
                    AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4}"""
 
     print(pintar_texto("...::: Formatting file: --> {} <--".format(file), color="green"))
-    
-    if NAME_SYSTEM_USER == "vagrant":
-        print("SOY VAGRANT!!")
-    else:
-        print("SOY UN SISTEMA OPERATIVO!!")
-    os.system('clang-format -i {} -style="{}"'.format(file, BETTY_STYLE))
+    os.system('clang-format-3.4 -i {} -style="{}"'.format(file, BETTY_STYLE))
  
 
 def format_pep(file):
@@ -125,7 +117,7 @@ def main():
 
     #Verifying the format
     print(pintar_texto("Checking that all the formats are ok"))
-    os.system("betty *.c && betty *.h && pep8 *.py")
+    os.system("betty *.c && betty *.h && pycodestyle *.py")
     confirm = input("Everything is ok? Y/n: ")
     print(pintar_texto("initializing push process", color="yellow"))
     
