@@ -132,7 +132,7 @@ def main():
             "Push process finished successfully!", color="green"))
     elif confirm in ["n", "N"]:
         print(pintar_texto(
-            f"Check the format and when you have finished, run again!", color="red"))
+            "Check the format and when you have finished, run again!", color="red"))
     else:
         print(pintar_texto("Invalid option, ending software", color="red"))
         sys.exit()
