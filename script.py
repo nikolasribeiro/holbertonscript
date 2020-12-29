@@ -40,10 +40,18 @@ def get_args():
 
 
 def format_betty(file):
+    import getpass
+    NAME_SYSTEM_USER = getpass.getuser()
+
     BETTY_STYLE = """{BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Allman,
                    AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4}"""
 
     print(pintar_texto("...::: Formatting file: --> {} <--".format(file), color="green"))
+    
+    if NAME_SYSTEM_USER == "vagrant":
+        print("SOY VAGRANT!!")
+    else:
+        print("SOY UN SISTEMA OPERATIVO!!")
     os.system('clang-format -i {} -style="{}"'.format(file, BETTY_STYLE))
  
 
