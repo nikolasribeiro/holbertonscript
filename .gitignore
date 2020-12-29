@@ -2,3 +2,5 @@ chromedriver
 switch.py
 *.c
 *.h
+.vscode/
+setup.py
