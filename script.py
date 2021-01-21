@@ -10,6 +10,7 @@ except:
     os.system("sudo apt install python3-pip -y")
     os.system("pip3 install termcolor")
     os.system("pip3 install autopep8")
+    os.system("pip3 install yapf")
     os.system("sudo apt install clang-format")
     print("---=== TERMCOLOR INSTALLED SUCCESSFULLY ===---")
 
@@ -36,7 +37,69 @@ def get_args():
         "-m", "--message", help="You can set a message for commit (you can use this flag without -g flag)", action="store_true"
     )
 
+    parser.add_argument(
+        "-d", "--docs", help="With this flag you can add all the documentation of class, methods and functions automatically", action="store_true"
+    )
+
     return parser.parse_args()
+
+
+def add_comments_to_python_file(text_file):
+    print(pintar_texto("...::: Adding Documentation for file: --> {} <--".format(text_file), color="yellow"))
+
+    comment = '''""" {} {} """'''
+    content_file = ""
+
+    # Leemos el archivo y manipulamos el contenido
+    with open(text_file, 'r') as file:
+        content = file.read().splitlines()
+        for n_line, line in enumerate(content):
+
+            # Add Shebang
+            if n_line+1 == 1 and "#!/usr/bin/python3" not in line:
+                content_file += "#!/usr/bin/python3"+"\n"
+                content_file += '\n\n""" Module {}"""'.format(text_file[:-3])+"\n"
+            
+            #Busca si existe la sintaxis class
+            if line.startswith("class") and line.endswith(":"):
+                name_of_class = line[line.find("class")+6:line.find("(") or line.find(":")]
+                add_class_doc = comment.format("class", name_of_class)
+                line = line.rstrip()
+
+                if add_class_doc not in content[n_line+1]:
+                    line = line.replace(line, line + "\n{}".format(chr(32)*4) + add_class_doc)
+                else:
+                    line = line
+  
+            #Busca si la funcion que encontro es un metodo o una funcion comun
+            if line.strip().startswith("def") and line.strip().endswith(":") and "self" in line:
+                name_of_def = line[line.find("def")+4:line.find("(") or line.find(":")]
+                add_method_doc = comment.format("function", name_of_def)
+                line = line.rstrip()
+
+                if add_method_doc not in content[n_line+1]:
+                    line = line.replace(line, line + "\n{}".format(chr(32)*8) + add_method_doc)
+                else:
+                    line = line
+            
+            #Busca una funcion comun
+            if line.strip().startswith("def") and line.strip().endswith(":"):
+                name_of_def = line[line.find("def")+4:line.find("(") or line.find(":")]
+                add_function_doc = comment.format("function", name_of_def)
+                line = line.rstrip()
+
+                if add_function_doc not in content[n_line+1]:
+                    line = line.replace(line, line + "\n{}".format(chr(32)*4) + add_function_doc)
+                else:
+                    line = line
+
+
+            # Guardamos todo el contenido en la variable para despues, reescribir todo
+            content_file += (line+'\n')
+
+    # Escribimos en el archivo todo el contenido del mismo
+    with open(text_file, "w") as file:
+        file.writelines(content_file)
 
 
 def format_betty(file):
@@ -113,11 +176,14 @@ def main():
             format_betty(files)
 
         elif files.endswith(".py"):
+            add_comments_to_python_file(files)
             format_pep(files)
 
     #Verifying the format
     print(pintar_texto("Checking that all the formats are ok"))
-    os.system("betty *.c && betty *.h && pycodestyle *.py")
+    os.system("betty *.c")
+    os.system("betty *.h")
+    os.system("pep8 *.py")
     confirm = input("Everything is ok? Y/n: ")
     print(pintar_texto("initializing push process", color="yellow"))
     
