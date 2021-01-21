@@ -170,6 +170,11 @@ def main():
         if args.pep != False:
             format_pep(files)
             break
+        
+        if args.docs != False:
+            add_comments_to_python_file(files)
+            break
+
 
         # Check the extension of the files
         if files.endswith(".c") or files.endswith(".h"):
