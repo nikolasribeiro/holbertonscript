@@ -112,7 +112,7 @@ def format_betty(file):
 
 def format_pep(file):
     print(pintar_texto("...::: Formatting file: --> {} <--".format(file), color="yellow"))
-    os.system("autopep8 -i {}".format(file))
+    os.system("black {}".format(file))
 
 
 def push_process(text):
@@ -186,8 +186,10 @@ def main():
 
     #Verifying the format
     print(pintar_texto("Checking that all the formats are ok"))
+    print(pintar_texto("...:::=== BETTY ===:::...", color="green"))
     os.system("betty *.c")
     os.system("betty *.h")
+    print(pintar_texto("...:::=== PEP8 ===:::...", color="cyan"))
     os.system("pep8 *.py")
     confirm = input("Everything is ok? Y/n: ")
     print(pintar_texto("initializing push process", color="yellow"))
