@@ -30,6 +30,11 @@ def get_args():
     parser.add_argument(
         "-p", "--pep", help="Format the code to pep8 style", action="store_true"
     )
+    
+    parser.add_argument(
+        "-js", "--javascript", help="Format the code to semistandard style", action="store_true"
+    )
+    
     parser.add_argument(
         "-g", "--git", help="This flag is a boolean, use this flag if you want to check and push your file", action="store_true"
     )
@@ -101,6 +106,24 @@ def add_comments_to_python_file(text_file):
     with open(text_file, "w") as file:
         file.writelines(content_file)
 
+def add_shebang_to_javascript(text_file):
+    content_file = ""
+
+    # Leemos el archivo y manipulamos el contenido
+    with open(text_file, 'r') as file:
+        content = file.read().splitlines()
+        for n_line, line in enumerate(content):
+            # Add Shebang
+            if n_line+1 == 1 and "#!/usr/bin/node" not in line:
+                content_file += "#!/usr/bin/node"+"\n"
+                print(pintar_texto("...::: Adding Shebang for file: --> {} <--".format(text_file), color="yellow"))
+
+            # Guardamos todo el contenido en la variable para despues, reescribir todo
+            content_file += (line+'\n')
+            
+    # Escribimos en el archivo todo el contenido del mismo
+    with open(text_file, "w") as file:
+        file.writelines(content_file)
 
 def format_betty(file):
     BETTY_STYLE = """{BasedOnStyle: LLVM, UseTab: Always, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Allman,
@@ -109,11 +132,13 @@ def format_betty(file):
     print(pintar_texto("...::: Formatting file: --> {} <--".format(file), color="green"))
     os.system('clang-format-3.4 -i {} -style="{}"'.format(file, BETTY_STYLE))
  
-
 def format_pep(file):
-    print(pintar_texto("...::: Formatting file: --> {} <--".format(file), color="yellow"))
+    print(pintar_texto("...::: Formatting file: --> {} <--".format(file), color="cyan"))
     os.system("black {}".format(file))
 
+def format_javascript(file):
+    print(pintar_texto("...::: Formatting file: --> {} <--".format(file), color="yellow"))
+    os.system("semistandard --fix {}".format(file))
 
 def push_process(text):
 
@@ -131,7 +156,6 @@ def push_process(text):
     else:
         print("Process canceled by User")
 
-
 def save_message(message):
 
     if message in ["q", "Q"]:
@@ -145,7 +169,6 @@ def save_message(message):
         print(pintar_texto("Message {} saved!".format( str(message) ), color="yellow"))
 
     return message
-
 
 def main():
     commit_message = ""
@@ -171,6 +194,10 @@ def main():
             format_pep(files)
             break
         
+        if args.javascript != False:
+            format_javascript(files)
+            break
+
         if args.docs != False:
             add_comments_to_python_file(files)
             break
@@ -183,6 +210,11 @@ def main():
         elif files.endswith(".py"):
             add_comments_to_python_file(files)
             format_pep(files)
+        
+        elif files.endswith('.js'):
+            add_shebang_to_javascript(files)
+            format_javascript(files)
+        
 
     #Verifying the format
     print(pintar_texto("Checking that all the formats are ok"))
@@ -191,6 +223,8 @@ def main():
     os.system("betty *.h")
     print(pintar_texto("...:::=== PEP8 ===:::...", color="cyan"))
     os.system("pep8 *.py")
+    print(pintar_texto("...:::=== SEMI-STANDARD ===:::...", color="yellow"))
+    os.system("semistandard *.js")
     confirm = input("Everything is ok? Y/n: ")
     print(pintar_texto("initializing push process", color="yellow"))
     
