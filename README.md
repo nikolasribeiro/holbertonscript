@@ -5,7 +5,7 @@ In this project, I create a script that auto-format all the files to Betty Style
 ## How to Install :floppy_disk:
 
 ### USE THE INSTALLER
-Execute the INSTALLER.py in your terminal and grab a coffie while INSTALLER works.
+Execute the INSTALLER.py in your terminal and grab a coffee while INSTALLER works.
 
  
 ### The old way to install HolbertonScript
