@@ -3,7 +3,12 @@
 In this project, I create a script that auto-format all the files to Betty Style and Pep8.
 <img src="img/script.png"/>
 ## How to Install :floppy_disk:
-### Steps
+
+### USE THE INSTALLER
+Execute the INSTALLER.py in your terminal and grab a coffie while INSTALLER works.
+
+
+### The old way to install HolbertonScript
 1. Clone this repository in your terminal
 ` git clone https://github.com/nikolasribeiro/holbertonscript `
 2. Make a new file with the script code like this: 
